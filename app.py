@@ -1,4 +1,5 @@
-# Simple To-Do List Program
+import sys
+from datetime import datetime
 
 # Function to display the menu
 def display_menu():
@@ -18,15 +19,14 @@ def view_tasks(tasks):
             print(f"{index}. {task}")
 
 # Function to add a new task
-def add_task(tasks):
-    task = input("Enter the task to add: ")
+def add_task(tasks, task):
     tasks.append(task)
     print(f"Task '{task}' has been added.")
 
 # Function to delete a task
-def delete_task(tasks):
+def delete_task(tasks, task_num):
     try:
-        task_num = int(input("Enter the task number to delete: "))
+        task_num = int(task_num)
         if 1 <= task_num <= len(tasks):
             deleted_task = tasks.pop(task_num - 1)
             print(f"Task '{deleted_task}' has been deleted.")
@@ -38,22 +38,22 @@ def delete_task(tasks):
 # Main function to run the program
 def main():
     tasks = []
-
-    while True:
-        display_menu()
-        choice = input("Enter your choice: ")
-
-        if choice == '1':
-            view_tasks(tasks)
-        elif choice == '2':
-            add_task(tasks)
-        elif choice == '3':
-            delete_task(tasks)
-        elif choice == '4':
-            print("Exiting To-Do List program. Goodbye!")
-            break
-        else:
-            print("Invalid choice! Please select a valid option.")
+    
+    # Read the arguments passed in Jenkins
+    if len(sys.argv) < 2:
+        print("No action provided, exiting program.")
+        return
+    
+    action = sys.argv[1]
+    
+    if action == 'view':
+        view_tasks(tasks)
+    elif action == 'add' and len(sys.argv) > 2:
+        add_task(tasks, sys.argv[2])
+    elif action == 'delete' and len(sys.argv) > 2:
+        delete_task(tasks, sys.argv[2])
+    else:
+        print("Invalid arguments provided.")
 
 if __name__ == "__main__":
     main()
